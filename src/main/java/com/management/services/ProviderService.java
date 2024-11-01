@@ -3,11 +3,12 @@ package com.management.services;
 import com.management.controllers.dtos.ProviderDTO;
 import com.management.models.Provider;
 import com.management.repositories.ProviderRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,25 +25,36 @@ public class ProviderService {
     }
 
     public ProviderDTO findById(Long id) {
-        Optional<Provider> provider = providerRepository.findById(id);
-        return provider.map(this::convertToDTO).orElse(null);
+        return providerRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElse(null);
     }
 
     public ProviderDTO create(ProviderDTO providerDTO) {
         Provider provider = convertToEntity(providerDTO);
-        Provider savedProvider = providerRepository.save(provider);
-        return convertToDTO(savedProvider);
+        try {
+            Provider savedProvider = providerRepository.save(provider);
+            return convertToDTO(savedProvider);
+        } catch (DataAccessException e) {
+
+            throw new RuntimeException("Erro ao salvar o fornecedor", e);
+        }
     }
 
     public ProviderDTO update(Long id, ProviderDTO providerDTO) {
-        Optional<Provider> existingProvider = providerRepository.findById(id);
-        if (existingProvider.isPresent()) {
-            Provider provider = convertToEntity(providerDTO);
-            provider.setId(existingProvider.get().getId());
+        Provider existingProvider = providerRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Fornecedor não encontrado"));
+
+        Provider provider = convertToEntity(providerDTO);
+        provider.setId(existingProvider.getId());
+
+        try {
             Provider updatedProvider = providerRepository.save(provider);
             return convertToDTO(updatedProvider);
+        } catch (DataAccessException e) {
+            // Tratar a exceção de acesso a dados
+            throw new RuntimeException("Erro ao atualizar o provedor", e);
         }
-        return null;
     }
 
     public boolean delete(Long id) {

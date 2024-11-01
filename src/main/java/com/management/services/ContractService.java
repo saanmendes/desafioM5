@@ -21,34 +21,17 @@ public class ContractService {
     public List<ContractDTO> findContractsByProvider(String fornecedorId, String startDate, Boolean active, String endDate, String descricao) {
         List<Contract> contracts = contractRepository.findByProviderId(Long.parseLong(fornecedorId));
 
-        if (startDate != null) {
-            LocalDate parsedStartDate = LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE);
-            contracts = contracts.stream()
-                    .filter(contract -> contract.getStartDate().equals(parsedStartDate))
-                    .collect(Collectors.toList());
-        }
-        if (active != null) {
-            contracts = contracts.stream()
-                    .filter(contract -> contract.isActive() == active)
-                    .collect(Collectors.toList());
-        }
-        if (endDate != null) {
-            LocalDate parsedEndDate = LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE);
-            contracts = contracts.stream()
-                    .filter(contract -> contract.getEndDate().equals(parsedEndDate))
-                    .collect(Collectors.toList());
-        }
-        if (descricao != null && !descricao.isEmpty()) {
-            contracts = contracts.stream()
-                    .filter(contract -> contract.getDescription().contains(descricao))
-                    .collect(Collectors.toList());
-        }
+        LocalDate parsedStartDate = startDate != null ? LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE) : null;
+        LocalDate parsedEndDate = endDate != null ? LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE) : null;
 
         return contracts.stream()
+                .filter(contract -> (parsedStartDate == null || contract.getStartDate().equals(parsedStartDate)))
+                .filter(contract -> (active == null || contract.isActive() == active))
+                .filter(contract -> (parsedEndDate == null || contract.getEndDate().equals(parsedEndDate)))
+                .filter(contract -> (descricao == null || descricao.isEmpty() || contract.getDescription().contains(descricao)))
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
-
 
     public List<ContractDTO> findAll() {
         return contractRepository.findAll()
@@ -57,7 +40,7 @@ public class ContractService {
                 .collect(Collectors.toList());
     }
 
-    public ContractDTO findById(String id) {
+    public ContractDTO findById(Long id) {
         Optional<Contract> contract = contractRepository.findById(id);
         return contract.map(this::convertToDTO).orElse(null);
     }
@@ -77,8 +60,7 @@ public class ContractService {
         return convertToDTO(savedContract);
     }
 
-
-    public ContractDTO updateContract(String id, ContractDTO contractDTO) {
+    public ContractDTO updateContract(Long id, ContractDTO contractDTO) {
         validateContractDates(contractDTO);
 
         Optional<Contract> existingContract = contractRepository.findById(id);
@@ -92,8 +74,7 @@ public class ContractService {
         return convertToDTO(updatedContract);
     }
 
-
-    public boolean deleteContract(String id) {
+    public boolean deleteContract(Long id) {
         if (contractRepository.existsById(id)) {
             contractRepository.deleteById(id);
             return true;
@@ -113,7 +94,6 @@ public class ContractService {
             throw new IllegalArgumentException("A data de término deve ser maior que a data de início.");
         }
     }
-
 
     private ContractDTO convertToDTO(Contract contract) {
         ContractDTO dto = new ContractDTO();
