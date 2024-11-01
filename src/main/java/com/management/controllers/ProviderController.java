@@ -30,13 +30,13 @@ public class ProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<ProviderDTO> create(@Valid @RequestBody ProviderDTO providerDTO) { // Adicionando @Valid
+    public ResponseEntity<ProviderDTO> create(@Valid @RequestBody ProviderDTO providerDTO) {
         ProviderDTO createdProvider = providerService.create(providerDTO);
         return ResponseEntity.status(201).body(createdProvider);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProviderDTO> update(@PathVariable Long id, @Valid @RequestBody ProviderDTO providerDTO) { // Adicionando @Valid
+    public ResponseEntity<ProviderDTO> update(@PathVariable Long id, @Valid @RequestBody ProviderDTO providerDTO) {
         ProviderDTO updatedProvider = providerService.update(id, providerDTO);
         return updatedProvider != null ? ResponseEntity.ok(updatedProvider) : ResponseEntity.notFound().build();
     }

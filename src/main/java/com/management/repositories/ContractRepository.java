@@ -9,8 +9,5 @@ import java.util.List;
 
 public interface ContractRepository extends JpaRepository <Contract, Long> {
 
-    @Query("SELECT c FROM Contract c WHERE c.endDate > CURRENT_DATE")
-    List<Contract> findActiveContracts();
-
     List<Contract> findByProviderId(Long providerId);
 }

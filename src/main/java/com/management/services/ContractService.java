@@ -18,21 +18,6 @@ public class ContractService {
     @Autowired
     private ContractRepository contractRepository;
 
-    public List<ContractDTO> findContractsByProvider(String fornecedorId, String startDate, Boolean active, String endDate, String descricao) {
-        List<Contract> contracts = contractRepository.findByProviderId(Long.parseLong(fornecedorId));
-
-        LocalDate parsedStartDate = startDate != null ? LocalDate.parse(startDate, DateTimeFormatter.ISO_DATE) : null;
-        LocalDate parsedEndDate = endDate != null ? LocalDate.parse(endDate, DateTimeFormatter.ISO_DATE) : null;
-
-        return contracts.stream()
-                .filter(contract -> (parsedStartDate == null || contract.getStartDate().equals(parsedStartDate)))
-                .filter(contract -> (active == null || contract.isActive() == active))
-                .filter(contract -> (parsedEndDate == null || contract.getEndDate().equals(parsedEndDate)))
-                .filter(contract -> (descricao == null || descricao.isEmpty() || contract.getDescription().contains(descricao)))
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
-
     public List<ContractDTO> findAll() {
         return contractRepository.findAll()
                 .stream()

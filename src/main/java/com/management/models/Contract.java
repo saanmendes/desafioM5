@@ -20,6 +20,7 @@ public class Contract {
     private BigDecimal totalValue;
     private String description;
     private boolean isActive;
+    private Long providerId;
 
     public Contract() {
     }
@@ -78,5 +79,13 @@ public class Contract {
 
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public Long getProviderId() {
+        return providerId;
+    }
+
+    public void setProviderId(Long providerId) {
+        this.providerId = providerId;
     }
 }

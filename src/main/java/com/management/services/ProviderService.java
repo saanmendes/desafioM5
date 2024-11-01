@@ -52,7 +52,6 @@ public class ProviderService {
             Provider updatedProvider = providerRepository.save(provider);
             return convertToDTO(updatedProvider);
         } catch (DataAccessException e) {
-            // Tratar a exceção de acesso a dados
             throw new RuntimeException("Erro ao atualizar o provedor", e);
         }
     }
@@ -67,7 +66,6 @@ public class ProviderService {
 
     private ProviderDTO convertToDTO(Provider provider) {
         ProviderDTO dto = new ProviderDTO();
-        dto.setId(provider.getId());
         dto.setName(provider.getName());
         dto.setCnpj(provider.getCnpj());
         dto.setCellphone(provider.getCellphone());

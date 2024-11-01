@@ -6,30 +6,20 @@ import jakarta.validation.constraints.*;
 import org.hibernate.validator.constraints.br.CNPJ;
 
 public class ProviderDTO {
-    @NotNull
-    Long id;
 
-    @Size(min = 5, message = "name not valid") @NotNull @NotBlank
+    @Size(min = 5, message = "name not valid") @NotNull
     String name;
 
-    @CNPJ @NotNull @NotBlank
+    @CNPJ @NotNull
     String cnpj;
 
-    @Size(min = 11, max = 11, message = "o celular precisa ter 11 caractere")  @NotNull @NotBlank
+    @Size(min = 11, max = 11, message = "o celular precisa ter 11 caractere")  @NotNull
     String cellphone;
 
-    @NotNull @NotBlank
+    @NotNull
     String address;
 
     public ProviderDTO() {
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public  String getName() {

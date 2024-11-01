@@ -15,18 +15,6 @@ public class ContractController {
     @Autowired
     private ContractService contractService;
 
-    @GetMapping("/contracts/{fornecedorId}/contract")
-    public List<ContractDTO> listContractsByProvider(
-            @PathVariable String fornecedorId,
-            @RequestParam(required = false) String startDate,
-            @RequestParam(required = false) Boolean active,
-            @RequestParam(required = false) String endDate,
-            @RequestParam(required = false) String description) {
-
-        return contractService.findContractsByProvider(fornecedorId, startDate, active, endDate, description);
-    }
-
-
     @GetMapping("/contract/{id}")
     public ResponseEntity<ContractDTO> findById(@PathVariable Long id) {
         ContractDTO contractDTO = contractService.findById(id);
