@@ -5,6 +5,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
@@ -16,7 +17,7 @@ public class Contract {
     private String numberOfTheContract;
     private LocalDate startDate;
     private LocalDate endDate;
-    private float totalValue;
+    private BigDecimal totalValue;
     private String description;
     private boolean isActive;
 
@@ -55,11 +56,11 @@ public class Contract {
         this.endDate = endDate;
     }
 
-    public float getTotalValue() {
+    public BigDecimal getTotalValue() {
         return totalValue;
     }
 
-    public void setTotalValue(float totalValue) {
+    public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
     }
 
