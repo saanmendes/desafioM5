@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 
-public interface ContractRepository extends JpaRepository <Contract, String> {
+public interface ContractRepository extends JpaRepository <Contract, Long> {
 
     @Query("SELECT c FROM Contract c WHERE c.endDate > CURRENT_DATE")
     List<Contract> findActiveContracts();
