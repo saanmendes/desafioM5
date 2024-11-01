@@ -2,14 +2,17 @@ package com.management.controllers;
 
 import com.management.controllers.dtos.ProviderDTO;
 import com.management.services.ProviderService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/providers")
+@Validated
 public class ProviderController {
 
     @Autowired
@@ -27,13 +30,13 @@ public class ProviderController {
     }
 
     @PostMapping
-    public ResponseEntity<ProviderDTO> create(@RequestBody ProviderDTO providerDTO) {
+    public ResponseEntity<ProviderDTO> create(@Valid @RequestBody ProviderDTO providerDTO) { // Adicionando @Valid
         ProviderDTO createdProvider = providerService.create(providerDTO);
         return ResponseEntity.status(201).body(createdProvider);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ProviderDTO> update(@PathVariable Long id, @RequestBody ProviderDTO providerDTO) {
+    public ResponseEntity<ProviderDTO> update(@PathVariable Long id, @Valid @RequestBody ProviderDTO providerDTO) { // Adicionando @Valid
         ProviderDTO updatedProvider = providerService.update(id, providerDTO);
         return updatedProvider != null ? ResponseEntity.ok(updatedProvider) : ResponseEntity.notFound().build();
     }

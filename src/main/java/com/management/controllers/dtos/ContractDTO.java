@@ -4,15 +4,17 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class ContractDTO {
 
-    @Id @NotNull
+    @NotNull
     Long id;
 
-    @Min(3) @Max(3) @NotNull
+    @Size(min = 3, max = 3) @NotNull
     String numberOfTheContract;
 
     @NotNull
@@ -22,7 +24,7 @@ public class ContractDTO {
     LocalDate endDate;
 
     @Min(1) @NotNull
-    float totalValue;
+    BigDecimal totalValue;
 
     @NotNull
     String description;
@@ -67,11 +69,11 @@ public class ContractDTO {
 
     @Min(1)
     @NotNull
-    public float getTotalValue() {
+    public BigDecimal getTotalValue() {
         return totalValue;
     }
 
-    public void setTotalValue(@Min(1) @NotNull float totalValue) {
+    public void setTotalValue(@Min(1) @NotNull BigDecimal totalValue) {
         this.totalValue = totalValue;
     }
 

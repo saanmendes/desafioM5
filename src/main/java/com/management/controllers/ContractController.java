@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/contracts")
 public class ContractController {
 
     @Autowired
     private ContractService contractService;
 
-    @GetMapping("/provider/{fornecedorId}/contracts")
+    @GetMapping("/contracts/{fornecedorId}/contract")
     public List<ContractDTO> listContractsByProvider(
             @PathVariable String fornecedorId,
             @RequestParam(required = false) String startDate,
@@ -27,26 +27,26 @@ public class ContractController {
     }
 
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ContractDTO> findById(@PathVariable String id) {
+    @GetMapping("/contract/{id}")
+    public ResponseEntity<ContractDTO> findById(@PathVariable Long id) {
         ContractDTO contractDTO = contractService.findById(id);
         return contractDTO != null ? ResponseEntity.ok(contractDTO) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/contract")
+    @PostMapping("/{providerId}/contract")
     public ResponseEntity<ContractDTO> createContract(@PathVariable String fornecedorId, @RequestBody ContractDTO contractDTO) {
         ContractDTO savedContract = contractService.saveContract(fornecedorId, contractDTO);
         return ResponseEntity.status(201).body(savedContract);
     }
 
     @PutMapping("/contract/{id}")
-    public ResponseEntity<ContractDTO> updateContract(@PathVariable String id, @RequestBody ContractDTO contractDTO) {
+    public ResponseEntity<ContractDTO> updateContract(@PathVariable Long id, @RequestBody ContractDTO contractDTO) {
         ContractDTO updatedContract = contractService.updateContract(id, contractDTO);
         return updatedContract != null ? ResponseEntity.ok(updatedContract) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/contract/{id}")
-    public ResponseEntity<Void> deleteContract(@PathVariable String id) {
+    public ResponseEntity<Void> deleteContract(@PathVariable Long id) {
         boolean isDeleted = contractService.deleteContract(id);
         return isDeleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
